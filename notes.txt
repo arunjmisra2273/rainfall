@@ -1,0 +1,12 @@
+imdlib — downloads and parses IMD's gridded data directly into Python objects
+
+xarray + netCDF4 + dask — the standard toolkit for NetCDF climate data; dask enables lazy loading so 124 years don't blow up your RAM
+
+scipy + statsmodels — SARIMAX, exponential smoothing, statistical tests
+
+scikit-learn — Ridge/Lasso, metrics, walk-forward cross-validation
+
+geopandas + regionmask — masking the grid into IMD's subdivisions
+
+tqdm — progress bars for those long downloads
+
