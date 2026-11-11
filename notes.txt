@@ -10,3 +10,36 @@ geopandas + regionmask — masking the grid into IMD's subdivisions
 
 tqdm — progress bars for those long downloads
 
+Your project setup and environment initialization are perfect. Structuring it this way with a `data/` folder, virtual environment, and tracking it immediately via Git sets a highly professional foundation.
+
+Since you'll eventually serve this via FastAPI, framing the exact Machine Learning outputs (your target variable, $y$) right now is the most crucial first step.
+
+Based on your project scope, your outputs will be defined across two dimensions: **Spatial** (Where) and **Temporal** (When).
+
+### 1. The Spatial Output (Where)
+
+The raw IMD dataset provides rainfall at a 0.25° × 0.25° grid resolution (thousands of points across India). Predicting for individual grid points using classical time-series methods is noisy and computationally expensive.
+
+Instead, you will use `geopandas` and `regionmask` to aggregate these grid points into **IMD's 36 Meteorological Subdivisions** (e.g., "Kerala", "Coastal Karnataka", "Vidarbha").
+
+* **The Output:** A single numerical rainfall value for a specific subdivision. (You will likely train a separate time-series model for each subdivision, or one global model with subdivision as a categorical feature).
+
+### 2. The Temporal Output (When)
+
+You mentioned both seasonal and sub-seasonal forecasting.
+
+* **Sub-seasonal Output (2-week ahead):** The cumulative rainfall (in millimeters) for the upcoming 14-day window. If the current date is July 1, the model outputs the total expected rainfall from July 2 through July 15.
+* **Seasonal Output:** The total cumulative rainfall (in millimeters) for the entire core Southwest Monsoon period (June through September, known as JJAS), or the percentage departure from the Long Period Average (LPA).
+
+### 3. What the FastAPI will eventually yield
+
+When you deploy this later, your model will be designed so that your FastAPI endpoint can receive a payload like `{"subdivision": "Kerala", "forecast_horizon": "14-day"}` and return:
+
+1. **Point Forecast:** e.g., `145.2 mm`
+2. **Confidence Intervals:** e.g., `[110.5 mm, 180.0 mm]` (Classical models like SARIMAX and Exponential Smoothing are excellent at providing mathematical confidence bounds, which are highly valuable for weather APIs).
+
+---
+
+**Ready for Step 1?**
+To get to those outputs, we need the raw data. Would you like to proceed with writing the Python script using `imdlib` to download the 1901–2024 daily gridded dataset into your `data/` directory?
+
